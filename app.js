@@ -1,6 +1,7 @@
 import express from "express";
 import morgan from "morgan";
 import cors from "cors";
+import "dotenv/config";
 
 import contactsRouter from "./routes/contactsRouter.js";
 import connectDatabase from "./db/connectDatabase.js";
@@ -24,6 +25,6 @@ app.use((err, req, res, next) => {
 
 await connectDatabase();
 
-app.listen(3000, () => {
+app.listen(process.env.PORT, () => {
   console.log("Server is running. Use our API on port: 3000");
 });
