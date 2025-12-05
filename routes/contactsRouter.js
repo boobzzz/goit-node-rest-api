@@ -1,10 +1,10 @@
 import { Router } from "express";
 import {
-  getAllContacts,
-  getOneContact,
-  deleteContact,
-  createContact,
-  updateContact,
+    getAllContacts,
+    getOneContact,
+    createContact,
+    deleteContact,
+    updateContact
 } from "../controllers/contactsControllers.js";
 import validateBody from "../helpers/validateBody.js";
 import { createContactSchema, updateContactSchema } from "../schemas/contactsSchemas.js";

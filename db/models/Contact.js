@@ -18,8 +18,10 @@ const Contact = sequelize.define(
         favorite: {
             type: DataTypes.BOOLEAN,
             defaultValue: false,
-        },
+        }
     }
 );
+
+// Contact.sync();
 
 export default Contact;
