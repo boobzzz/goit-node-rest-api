@@ -1,0 +1,12 @@
+import sequelize from "./sequelize.js";
+
+const connectDatabase = async () => {
+    try {
+        await sequelize.authenticate();
+        console.log("Database connection successful");
+    } catch (error) {
+        console.log(`Database connection failed: ${error.message}`);
+    }
+}
+
+export default connectDatabase;
