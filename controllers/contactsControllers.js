@@ -1,8 +1,8 @@
 import {
     listContacts,
     getContactById,
-    removeContact,
     addContact,
+    removeContact,
     changeContact
 } from "../services/contactsServices.js";
 import HttpError from "../helpers/HttpError.js";
@@ -13,7 +13,7 @@ export const getAllContacts = async (req, res, next) => {
         const result = await listContacts();
         res.json(result);
     } catch (error) {
-        next(HttpError(error.status, error.message));
+        next(error);
     }
 };
 
@@ -28,7 +28,7 @@ export const getOneContact = async (req, res, next) => {
 
         res.json(result);
     } catch (error) {
-        next(HttpError(error.status, error.message));
+        next(error);
     }
 };
 
@@ -43,23 +43,24 @@ export const deleteContact = async (req, res, next) => {
 
         res.json(result);
     } catch (error) {
-        next(HttpError(error.status, error.message));
+        next(error);
     }
 };
 
 export const createContact = async (req, res, next) => {
     try {
         const { name, email, phone } = req.body;
-        const result = await addContact(name, email, phone);
+        const result = await addContact({ name, email, phone });
 
         res.status(201).json(result);
     } catch (error) {
-        next(HttpError(error.status, error.message));
+        next(error);
     }
 };
 
 export const updateContact = async (req, res, next) => {
     try {
+        console.log(req.params);
         const { id } = req.params;
         const result = await changeContact(id, req.body);
 
@@ -69,6 +70,6 @@ export const updateContact = async (req, res, next) => {
 
         res.json(result);
     } catch (error) {
-        next(HttpError(error.status, error.message));
+        next(error);
     }
 };
