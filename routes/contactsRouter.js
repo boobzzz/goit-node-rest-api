@@ -6,6 +6,7 @@ import {
     deleteContact,
     updateContact
 } from "../controllers/contactsControllers.js";
+import authenticate from "../middlewares/authenticate.js";
 import validateBody from "../helpers/validateBody.js";
 import {
     createContactSchema,
@@ -14,6 +15,8 @@ import {
 } from "../schemas/contactsSchemas.js";
 
 const contactsRouter = Router();
+
+contactsRouter.use(authenticate);
 
 contactsRouter.get("/", getAllContacts);
 
