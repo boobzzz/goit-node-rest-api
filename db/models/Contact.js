@@ -18,10 +18,15 @@ const Contact = sequelize.define(
         favorite: {
             type: DataTypes.BOOLEAN,
             defaultValue: false,
+        },
+        owner: {
+            type: DataTypes.INTEGER,
+            defaultValue: 0,
+            allowNull: false,
         }
     }
 );
 
-// Contact.sync();
+// Contact.sync({ alter: true });
 
 export default Contact;
