@@ -21,12 +21,17 @@ const Contact = sequelize.define(
         },
         owner: {
             type: DataTypes.INTEGER,
-            defaultValue: 0,
-            allowNull: false,
+            references: {
+                model: "users",
+                key: "id",
+            },
+            onUpdate: "CASCADE",
+            onDelete: "CASCADE",
+            allowNull: false
         }
     }
 );
 
-// Contact.sync({ alter: true });
+// Contact.sync();
 
 export default Contact;
