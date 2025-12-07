@@ -19,7 +19,14 @@ export const loginUser = async ({ email, password }) => {
         throw HttpError(401, "Email or password is wrong");
     }
 
-    user.token = createToken({ id: user.id });
+    await user.update({
+        token: createToken({ id: user.id })
+    });
+    return user;
+}
+
+export const logoutUser = async (user) => {
+    await user.update({ token: null });
     return user;
 }
 

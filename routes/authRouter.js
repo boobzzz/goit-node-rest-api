@@ -1,5 +1,10 @@
 import { Router } from "express";
-import { registerController, loginController, getCurrentController } from "../controllers/authControllers.js";
+import {
+    registerController,
+    loginController,
+    getCurrentController,
+    logoutController
+} from "../controllers/authControllers.js";
 import { loginSchema, registerSchema } from "../schemas/userSchemas.js";
 import validateBody from "../helpers/validateBody.js";
 import authenticate from "../middlewares/authenticate.js";
@@ -11,5 +16,7 @@ authRouter.post("/register", validateBody(registerSchema), registerController);
 authRouter.post("/login", validateBody(loginSchema), loginController);
 
 authRouter.get("/current", authenticate, getCurrentController);
+
+authRouter.post("/logout", authenticate, logoutController);
 
 export default authRouter;
