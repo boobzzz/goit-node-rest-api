@@ -20,3 +20,12 @@ export const loginController = async (req, res) => {
         }
     });
 }
+
+export const getCurrentController = async (req, res) => {
+    const { email, subscription } = req.user;
+
+    res.status(200).json({
+        email,
+        subscription
+    });
+}
