@@ -2,11 +2,13 @@ import bcrypt from "bcrypt";
 import User from "../db/models/User.js";
 import HttpError from "../helpers/HttpError.js";
 import { hashPassword } from "../helpers/hashPassword.js";
+import { getUserAvatarURL } from "../helpers/avatar.js";
 import { createToken } from "../helpers/jwt.js";
 
 export const registerUser = async (payload) => {
-    const hashedPassword = await hashPassword(payload.password);
-    return User.create({ ...payload, password: hashedPassword });
+    const password = await hashPassword(payload.password);
+    const avatarURL = await getUserAvatarURL(payload.email);
+    return User.create({ ...payload, password, avatarURL });
 }
 
 export const loginUser = async ({ email, password }) => {
