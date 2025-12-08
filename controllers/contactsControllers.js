@@ -3,24 +3,26 @@ import {
     getContactById,
     addContact,
     removeContact,
-    changeContact
+    updateContact
 } from "../services/contactsServices.js";
 import HttpError from "../helpers/HttpError.js";
 
 
-export const getAllContacts = async (req, res, next) => {
+export const getContactsController = async (req, res, next) => {
     try {
-        const result = await listContacts();
+        const { id: owner } = req.user;
+        const result = await listContacts({ owner });
         res.json(result);
     } catch (error) {
         next(error);
     }
 };
 
-export const getOneContact = async (req, res, next) => {
+export const getContactController = async (req, res, next) => {
     try {
         const { id } = req.params;
-        const result = await getContactById(id);
+        const { id: owner } = req.user;
+        const result = await getContactById({ id, owner });
 
         if (!result) {
             throw HttpError(404);
@@ -32,10 +34,11 @@ export const getOneContact = async (req, res, next) => {
     }
 };
 
-export const deleteContact = async (req, res, next) => {
+export const deleteContactController = async (req, res, next) => {
     try {
         const { id } = req.params;
-        const result = await removeContact(id);
+        const { id: owner } = req.user;
+        const result = await removeContact({ id, owner });
 
         if (!result) {
             throw HttpError(404);
@@ -47,10 +50,10 @@ export const deleteContact = async (req, res, next) => {
     }
 };
 
-export const createContact = async (req, res, next) => {
+export const createContactController = async (req, res, next) => {
     try {
-        const { name, email, phone } = req.body;
-        const result = await addContact({ name, email, phone });
+        const { id: owner } = req.user;
+        const result = await addContact({ ...req.body, owner });
 
         res.status(201).json(result);
     } catch (error) {
@@ -58,11 +61,11 @@ export const createContact = async (req, res, next) => {
     }
 };
 
-export const updateContact = async (req, res, next) => {
+export const updateContactController = async (req, res, next) => {
     try {
-        console.log(req.params);
         const { id } = req.params;
-        const result = await changeContact(id, req.body);
+        const { id: owner } = req.user;
+        const result = await updateContact({ id, owner }, req.body);
 
         if (!result) {
             throw HttpError(404);

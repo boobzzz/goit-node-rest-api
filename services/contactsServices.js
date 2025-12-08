@@ -1,19 +1,19 @@
 import Contact from "../db/models/Contact.js";
 
-export const listContacts = () => {
-    return Contact.findAll();
+export const listContacts = (where) => {
+    return Contact.findAll({ where });
 }
 
-export const getContactById = (contactId) => {
-    return Contact.findByPk(contactId);
+export const getContactById = (where) => {
+    return Contact.findOne({ where });
 }
 
 export const addContact = (payload) => {
     return Contact.create(payload);
 }
 
-export const removeContact = async (contactId) => {
-    const contact = await getContactById(contactId);
+export const removeContact = async (where) => {
+    const contact = await getContactById(where);
     if (!contact) {
         return null;
     }
@@ -21,8 +21,8 @@ export const removeContact = async (contactId) => {
     return contact;
 }
 
-export const changeContact = async (contactId, payload) => {
-    const contact = await getContactById(contactId);
+export const updateContact = async (where, payload) => {
+    const contact = await getContactById({ where });
     if (!contact) {
         return null;
     }
