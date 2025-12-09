@@ -8,7 +8,6 @@ import authRouter from "./routes/authRouter.js";
 import connectDatabase from "./db/connectDatabase.js";
 import notFoundHandler from "./middlewares/notFoundHandler.js";
 import errorHandler from "./middlewares/errorHandler.js";
-import sendMail from "./services/mailServices.js";
 
 const app = express();
 
@@ -28,5 +27,3 @@ await connectDatabase();
 app.listen(process.env.PORT, () => {
     console.log("Server is running. Use our API on port: 3000");
 });
-
-// sendMail();

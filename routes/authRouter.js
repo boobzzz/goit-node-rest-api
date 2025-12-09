@@ -1,6 +1,7 @@
 import { Router } from "express";
 import {
     registerController,
+    verifyController,
     loginController,
     getCurrentController,
     logoutController,
@@ -14,6 +15,8 @@ import upload from "../middlewares/upload.js";
 const authRouter = Router();
 
 authRouter.post("/register", validateBody(registerSchema), registerController);
+
+authRouter.get("/verify/:verificationToken", verifyController);
 
 authRouter.post("/login", validateBody(loginSchema), loginController);
 

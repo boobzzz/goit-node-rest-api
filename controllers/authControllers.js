@@ -1,4 +1,10 @@
-import {registerUser, loginUser, logoutUser, updateAvatar} from "../services/authServices.js";
+import {
+    registerUser,
+    verifyEmail,
+    loginUser,
+    logoutUser,
+    updateAvatar
+} from "../services/authServices.js";
 
 export const registerController = async (req, res) => {
     const { email, subscription } = await registerUser(req.body);
@@ -6,6 +12,15 @@ export const registerController = async (req, res) => {
     res.status(201).json({
         email,
         subscription
+    });
+}
+
+export const verifyController = async (req, res) => {
+    const { verificationToken } = req.params;
+    await verifyEmail(verificationToken);
+
+    res.status(200).json({
+        message: "Verification successful"
     });
 }
 
@@ -37,9 +52,6 @@ export const logoutController = async (req, res) => {
 }
 
 export const updateAvatarController = async (req, res) => {
-    // console.log('req.file:', req.file);
-    // console.log('req.body:', req.body);
-    // console.log('req.headers:', req.headers['content-type']);
     const { avatarURL } = await updateAvatar({
         user: req.user,
         file: req.file

@@ -13,18 +13,20 @@ const nodemailerConfig = {
 
 const transport = nodemailer.createTransport(nodemailerConfig);
 
+// payload example
 // const email = {
 //     from: process.env.SMTP_USER,
 //     to: "wolaseb141@lawior.com",
 //     subject: "Test mail",
 //     html: "<strong>Test mail</strong>"
 // };
-
-const sendMail = (payload) => {
+export const sendMail = (payload) => {
     const email = { ...payload, from: process.env.SMTP_USER };
     return transport.sendMail(email)
         .then((msg) => console.log(msg))
         .catch((err) => console.log(err));
 }
 
-export default sendMail;
+export const getVerificationLink = (token) => {
+    return `<a href="${process.env.PUBLIC_URL}/api/auth/verify/${token}" target="_blank">Verify email</a>`;
+}

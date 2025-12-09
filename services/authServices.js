@@ -5,14 +5,46 @@ import User from "../db/models/User.js";
 import HttpError from "../helpers/HttpError.js";
 import { hashPassword } from "../helpers/hashPassword.js";
 import { getUserAvatarURL } from "../helpers/avatar.js";
-import { createToken } from "../helpers/jwt.js";
+import { createToken, verifyToken } from "../helpers/jwt.js";
+import { sendMail, getVerificationLink } from "../helpers/sendMail.js";
 
 const avatarsDir = path.resolve("public", "avatars");
 
 export const registerUser = async (payload) => {
     const password = await hashPassword(payload.password);
     const avatarURL = await getUserAvatarURL(payload.email);
-    return User.create({ ...payload, password, avatarURL });
+    const user = await User.create({
+        ...payload,
+        password,
+        avatarURL,
+        verificationToken: createToken({ email: payload.email })
+    });
+
+    const verificationParams = {
+        to: payload.email,
+        subject: "Email verification",
+        html: getVerificationLink(user.verificationToken),
+    };
+
+    await sendMail(verificationParams);
+
+    return user;
+}
+
+export const verifyEmail = async (token) => {
+    const { data, error } = verifyToken(token);
+    if (error) {
+        throw HttpError(404, "User not found");
+    }
+
+    const user = await findUser({ email: data.email });
+    if (user.verify) {
+        throw HttpError(400, "Verification has already been passed");
+    }
+    await user.update({
+        verify: true,
+        verificationToken: null
+    });
 }
 
 export const loginUser = async ({ email, password }) => {
@@ -20,6 +52,10 @@ export const loginUser = async ({ email, password }) => {
     if (!user) {
         throw HttpError(401, "Email or password is wrong");
     }
+    if (!user.verify) {
+        throw HttpError(401, "Email is not verified");
+    }
+
     const passwordMatch = await bcrypt.compare(password, user.password);
     if (!passwordMatch) {
         throw HttpError(401, "Email or password is wrong");
