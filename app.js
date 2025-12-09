@@ -1,5 +1,4 @@
 import express from "express";
-import path from "node:path";
 import morgan from "morgan";
 import cors from "cors";
 import "dotenv/config";
@@ -9,6 +8,7 @@ import authRouter from "./routes/authRouter.js";
 import connectDatabase from "./db/connectDatabase.js";
 import notFoundHandler from "./middlewares/notFoundHandler.js";
 import errorHandler from "./middlewares/errorHandler.js";
+import sendMail from "./services/mailServices.js";
 
 const app = express();
 
@@ -28,3 +28,5 @@ await connectDatabase();
 app.listen(process.env.PORT, () => {
     console.log("Server is running. Use our API on port: 3000");
 });
+
+// sendMail();
