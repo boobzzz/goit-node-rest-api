@@ -20,13 +20,11 @@ export const registerUser = async (payload) => {
         verificationToken: createToken({ email: payload.email })
     });
 
-    const verificationParams = {
+    await sendMail({
         to: payload.email,
         subject: "Email verification",
         html: getVerificationLink(user.verificationToken),
-    };
-
-    await sendMail(verificationParams);
+    });
 
     return user;
 }
@@ -41,9 +39,27 @@ export const verifyEmail = async (token) => {
     if (user.verify) {
         throw HttpError(400, "Verification has already been passed");
     }
+
     await user.update({
         verify: true,
         verificationToken: null
+    });
+}
+
+export const resendVerifyEmail = async ({ email }) => {
+    const user = await findUser({ email });
+    if (!user) {
+        throw HttpError(400, "User not found");
+    }
+    if (user.verify) {
+        throw HttpError(400, "Verification has already been passed");
+    }
+
+    user.update({ verificationToken: createToken({ email }) });
+    await sendMail({
+        to: email,
+        subject: "Email verification",
+        html: getVerificationLink(user.verificationToken),
     });
 }
 

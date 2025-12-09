@@ -3,7 +3,7 @@ import {
     verifyEmail,
     loginUser,
     logoutUser,
-    updateAvatar
+    updateAvatar, resendVerifyEmail
 } from "../services/authServices.js";
 
 export const registerController = async (req, res) => {
@@ -21,6 +21,14 @@ export const verifyController = async (req, res) => {
 
     res.status(200).json({
         message: "Verification successful"
+    });
+}
+
+export const resendVerifyController = async (req, res) => {
+    await resendVerifyEmail(req.body);
+
+    res.status(200).json({
+        message: "Verification email sent"
     });
 }
 
